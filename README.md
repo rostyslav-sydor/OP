@@ -10,4 +10,4 @@ check.txt:
 *41532*
 *2*1***
 
-The outer cells are numbers of visible buildings and inner cells are heights of buildings. 
+The outer cells are numbers of visible buildings(star means any) and inner cells are heights of buildings. 

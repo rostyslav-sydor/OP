@@ -44,13 +44,13 @@ def left_to_right_check(input_line: str, pivot: int):
     >>> left_to_right_check("452453*", 5)
     False
     """
-    current_highest = 0
-    visible_buildings = 0
+    currentHighest = 0
+    visibleBuildings = 0
     for height in input_line[1:-1]:
-        if int(height) > current_highest:
-            current_highest = int(height)
-            visible_buildings += 1
-    if visible_buildings == int(pivot):
+        if int(height) > currentHighest:
+            currentHighest = int(height)
+            visibleBuildings += 1
+    if visibleBuildings == int(pivot):
         return True
     return False
 
@@ -72,12 +72,58 @@ def check_horizontal_visibility(board: list):
     """
     for row in board[1:-1]:
         if row[0] != '*' and not left_to_right_check(row, row[0]):
-            print(left_to_right_check(row, row[0]), row)
             return False
         row = row[::-1]
         if row[0] != '*' and not left_to_right_check(row, row[0]):
-            print(left_to_right_check(row, row[0]), row)
             return False
     return True
 
+
+def check_uniqueness_in_rows(board: list):
+    """
+    Check buildings of unique height in each row.
+
+    Return True if buildings in a row have unique length, False otherwise.
+
+    >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])
+    True
+    >>> check_uniqueness_in_rows(['***21**', '452453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])
+    False
+    >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*', '*553215', '*35214*', '*41532*', '*2*1***'])
+    False
+    """
+    for row in board[1:-1]:
+        existingNums = set()
+        row = row[1:-1]
+        for number in row:
+            if number in existingNums and number != '*':
+                return False
+            else:
+                existingNums.add(number)
+    return True
+
+
+def check_columns(board: list):
+    """
+    Check column-wise compliance of the board for uniqueness (buildings of unique height) and visibility (top-bottom and vice versa).
+
+    Same as for horizontal cases, but aggregated in one function for vertical case, i.e. columns.
+
+    >>> check_columns(['***21**', '412453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])
+    True
+    >>> check_columns(['***21**', '412453*', '423145*', '*543215', '*35214*', '*41232*', '*2*1***'])
+    False
+    >>> check_columns(['***21**', '412553*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])
+    False
+    """
+    reversedBoard = []
+    for i in range(5):
+        col = []
+        for row in board:
+            col.append(row[i+1])
+        colStr = ''.join(col)
+        reversedBoard.append(colStr)
+    if check_uniqueness_in_rows(reversedBoard) and check_horizontal_visibility(reversedBoard):
+        return True
+    return False
 

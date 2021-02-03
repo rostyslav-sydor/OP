@@ -127,3 +127,29 @@ def check_columns(board: list):
         return True
     return False
 
+
+def check_rows(board):
+    """
+    check_columns functions but row-wise
+    """
+    if check_uniqueness_in_rows(board) and check_horizontal_visibility(board):
+        return True
+    return False
+
+
+def check_skyscrapers(input_path: str):
+    """
+    Main function to check the status of skyscraper game board.
+    Return True if the board status is compliant with the rules,
+    False otherwise.
+
+    >>> check_skyscrapers("check.txt")
+    True
+    """
+    board = read_input(input_path)
+    if check_uniqueness_in_rows(board) and check_columns(board) and check_rows(board):
+        return True
+    return False
+
+if __name__ == "__main__":
+    check_skyscrapers("check.txt")
